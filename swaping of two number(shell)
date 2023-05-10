@@ -1,11 +1,7 @@
-#!/bin/bash
-
-echo "Enter the first number: "
-read number1
-
-echo "Enter the second number: "
-read number2
-
-product=$((number1 * number2))
-
-echo "The product of $number1 and $number2 is $product."
+echo "Enter the two numbers "
+read a b
+temp=$a
+a=$b
+b=$temp
+echo"after swapping"
+echo$a$b
