@@ -1,12 +1,10 @@
-#!/bin/bash
-
-echo "Enter a number: "
-read number
-
-remainder=$((number % 2))
-
-if [ $remainder -eq 0 ]; then
-    echo "The number is even."
+echo "Enter a number"
+read n
+r='expr $n % 2'
+echo "the result"
+if [$r-eq 0]
+then
+echo"$n is even number"
 else
-    echo "The number is odd."
+echo"$n is odd number"
 fi
