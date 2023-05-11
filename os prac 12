@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define NUM_PARTITIONS 6
+#define NUM_PROCESSES 5
+
+int main() {
+    int partitions[NUM_PARTITIONS] = {300, 600, 350, 200, 750, 125}; // Memory partitions
+    int processes[NUM_PROCESSES] = {115, 500, 358, 200, 375}; // Processes to allocate
+
+    int allocated[NUM_PROCESSES] = {0}; // Array to track which processes have been allocated
+    int i, j, best_fit_index;
+
+    // Iterate through each process to allocate
+    for (i = 0; i < NUM_PROCESSES; i++) {
+        best_fit_index = -1; // Initialize the best fit index to -1
+
+        // Find the partition with the smallest size that can fit the current process
+        for (j = 0; j < NUM_PARTITIONS; j++) {
+            if (partitions[j] >= processes[i]) {
+                if (best_fit_index == -1 || partitions[j] < partitions[best_fit_index]) {
+                    best_fit_index = j;
+                }
+            }
+        }
+
+        // If a suitable partition was found, allocate the process to that partition
+        if (best_fit_index != -1) {
+            partitions[best_fit_index] -= processes[i];
+            allocated[i] = 1;
+        }
+    }
+
+    // Print the allocation results
+    printf("Allocation results:\n");
+    for (i = 0; i < NUM_PROCESSES; i++) {
+        if (allocated[i]) {
+            printf("Process %d allocated\n", processes[i]);
+        } else {
+            printf("Process %d not allocated\n", processes[i]);
+        }
+    }
+
+    return 0;
+}
