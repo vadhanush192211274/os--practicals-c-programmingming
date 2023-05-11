@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+
+void print_odd_numbers()
+{
+    pid_t pid = getpid();
+    printf("Process %d printing odd numbers: ", pid);
+    for (int i = 1; i <= 10; i += 2)
+    {
+        printf("%d ", i);
+    }
+    printf("\n");
+}
+
+void print_even_numbers()
+{
+    pid_t pid = getpid();
+    printf("Process %d printing even numbers: ", pid);
+    for (int i = 2; i <= 10; i += 2)
+    {
+        printf("%d ", i);
+    }
+    printf("\n");
+}
+
+void print_multiples_of_three()
+{
+    pid_t pid = getpid();
+    printf("Process %d printing multiples of three: ", pid);
+    for (int i = 3; i <= 30; i += 3)
+    {
+        printf("%d ", i);
+    }
+    printf("\n");
+}
+
+void print_multiples_of_five()
+{
+    pid_t pid = getpid();
+    printf("Process %d printing multiples of five: ", pid);
+    for (int i = 5; i <= 50; i += 5)
+    {
+        printf("%d ", i);
+    }
+    printf("\n");
+}
+
+int main()
+{
+    pid_t child_pid[4];
+
+    for (int i = 0; i < 4; i++)
+    {
+        child_pid[i] = fork();
+
+        if (child_pid[i] == 0) // child process
+        {
+            switch (i)
+            {
+                case 0:
+                    print_odd_numbers();
+                    break;
+                case 1:
+                    print_even_numbers();
+                    break;
+                case 2:
+                    print_multiples_of_three();
+                    break;
+                case 3:
+                    print_multiples_of_five();
+                    break;
+                default:
+                    break;
+            }
+            exit(0);
+        }
+        else if (child_pid[i] < 0)
+        {
+            printf("Fork error.\n");
+            exit(1);
+        }
+    }
+
+    // wait for all child processes to finish
+    for (int i = 0; i < 4; i++)
+    {
+        waitpid(child_pid[i], NULL, 0);
+    }
+
+    return 0;
+}
