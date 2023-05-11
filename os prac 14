@@ -1,0 +1,142 @@
+#include <stdio.h>
+
+int main() {
+    int frames[3] = {-1, -1, -1}; // Initializing frames to -1
+    int page_faults = 0; // Initializing page faults to 0
+    int ref_string[] = {7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1};
+    int n = sizeof(ref_string)/sizeof(ref_string[0]); // Size of reference string
+    int frame_count = 0; // Counter to keep track of available frames
+    
+    // Loop through the reference string
+    for(int i=0; i<n; i++) {
+        int page = ref_string[i];
+        int flag = 0; // Flag to check if page is already in frames
+        
+        // Check if page is already in frames
+        for(int j=0; j<3; j++) {
+            if(frames[j] == page) {
+                flag = 1;
+                break;
+            }
+        }
+        
+        // If page is not in frames, replace the page which is not in demand for the longest future time
+        if(flag == 0) {
+            if(frame_count < 3) {
+                frames[frame_count] = page;
+                frame_count++;
+            }
+            else {
+                int max_future = -1;
+                int replace_page_index;
+                
+                for(int j=0; j<3; j++) {
+                    int k;
+                    for(k=i+1; k<n; k++) {
+                        if(frames[j] == ref_string[k]) {
+                            if(k > max_future) {
+                                max_future = k;
+                                replace_page_index = j;
+                            }
+                            break;
+                        }
+                    }
+                    if(k == n) {
+                        replace_page_index = j;
+                        break;
+                    }
+                }
+                
+                frames[replace_page_index] = page;
+            }
+            page_faults++;
+        }
+        
+        // Print current state of frames
+        printf("Frames: ");
+        for(int j=0; j<3; j++) {
+            if(frames[j] == -1) {
+                printf("X ");
+            }
+            else {
+                printf("%d ", frames[j]);
+            }
+        }
+        printf("\n");
+    }
+    
+    // Print number of page faults
+    printf("Number of page faults: %d\n", page_faults);
+    
+    return 0;
+#include <stdio.h>
+
+int main() {
+    int frames[3] = {-1, -1, -1}; // Initializing frames to -1
+    int page_faults = 0; // Initializing page faults to 0
+    int ref_string[] = {7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1};
+    int n = sizeof(ref_string)/sizeof(ref_string[0]); // Size of reference string
+    int frame_count = 0; // Counter to keep track of available frames
+    
+    // Loop through the reference string
+    for(int i=0; i<n; i++) {
+        int page = ref_string[i];
+        int flag = 0; // Flag to check if page is already in frames
+        
+        // Check if page is already in frames
+        for(int j=0; j<3; j++) {
+            if(frames[j] == page) {
+                flag = 1;
+                break;
+            }
+        }
+        
+        // If page is not in frames, replace the page which is not in demand for the longest future time
+        if(flag == 0) {
+            if(frame_count < 3) {
+                frames[frame_count] = page;
+                frame_count++;
+            }
+            else {
+                int max_future = -1;
+                int replace_page_index;
+                
+                for(int j=0; j<3; j++) {
+                    int k;
+                    for(k=i+1; k<n; k++) {
+                        if(frames[j] == ref_string[k]) {
+                            if(k > max_future) {
+                                max_future = k;
+                                replace_page_index = j;
+                            }
+                            break;
+                        }
+                    }
+                    if(k == n) {
+                        replace_page_index = j;
+                        break;
+                    }
+                }
+                
+                frames[replace_page_index] = page;
+            }
+            page_faults++;
+        }
+        
+        // Print current state of frames
+        printf("Frames: ");
+        for(int j=0; j<3; j++) {
+            if(frames[j] == -1) {
+                printf("X ");
+            }
+            else {
+                printf("%d ", frames[j]);
+            }
+        }
+        printf("\n");
+    }
+    
+    // Print number of page faults
+    printf("Number of page faults: %d\n", page_faults);
+    
+    return 0;
