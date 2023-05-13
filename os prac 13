@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct File {
+    char name[100];
+    struct File* next;
+};
+
+struct Directory {
+    struct File* head;
+};
+
+void createDirectory(struct Directory* dir) {
+    dir->head = NULL;
+    printf("Directory created successfully!\n");
+}
+
+void addFile(struct Directory* dir, const char* filename) {
+    struct File* newFile = (struct File*)malloc(sizeof(struct File));
+    strcpy(newFile->name, filename);
+    newFile->next = NULL;
+
+    if (dir->head == NULL) {
+        dir->head = newFile;
+    } else {
+        struct File* current = dir->head;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = newFile;
+    }
+
+    printf("File '%s' added successfully!\n", filename);
+}
+
+void displayFiles(const struct Directory* dir) {
+    if (dir->head == NULL) {
+        printf("No files in the directory.\n");
+        return;
+    }
+
+    printf("Files in the directory:\n");
+    struct File* current = dir->head;
+    while (current != NULL) {
+        printf("%s\n", current->name);
+        current = current->next;
+    }
+}
+
+int main() {
+    struct Directory cseDirectory;
+    createDirectory(&cseDirectory);
+
+    addFile(&cseDirectory, "A");
+    addFile(&cseDirectory, "B");
+    addFile(&cseDirectory, "C");
+
+    displayFiles(&cseDirectory);
+
+    return 0;
+}
