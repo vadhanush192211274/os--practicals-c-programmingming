@@ -1,0 +1,50 @@
+#include <stdio.h>
+
+#define NUM_PARTITIONS 6
+#define NUM_PROCESSES 5
+
+int memoryPartitions[NUM_PARTITIONS] = {300, 600, 350, 200, 750, 125};
+int processSizes[NUM_PROCESSES] = {115, 500, 358, 200, 375};
+int allocatedPartitions[NUM_PROCESSES] = {-1};
+
+void worstFitAllocation() {
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        int processSize = processSizes[i];
+        int maxFragmentation = -1;
+        int index = -1;
+
+        for (int j = 0; j < NUM_PARTITIONS; j++) {
+            if (memoryPartitions[j] >= processSize) {
+                int fragmentation = memoryPartitions[j] - processSize;
+                if (fragmentation > maxFragmentation) {
+                    maxFragmentation = fragmentation;
+                    index = j;
+                }
+            }
+        }
+
+        if (index != -1) {
+            allocatedPartitions[i] = index;
+            memoryPartitions[index] -= processSize;
+        }
+    }
+}
+
+void printAllocation() {
+    printf("Process\t\tProcess Size\tAllocated Partition\n");
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        printf("%d\t\t%d KB\t\t", i+1, processSizes[i]);
+        if (allocatedPartitions[i] != -1) {
+            printf("%d\n", allocatedPartitions[i]+1);
+        } else {
+            printf("Not Allocated\n");
+        }
+    }
+}
+
+int main() {
+    worstFitAllocation();
+    printAllocation();
+
+    return 0;
+}
