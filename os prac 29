@@ -1,0 +1,53 @@
+#include <stdio.h>
+
+#define MAX_PARTITIONS 5
+#define MAX_PROCESSES 5
+
+typedef struct {
+    int size;
+    int allocated;
+} Partition;
+
+typedef struct {
+    int size;
+    int allocated;
+} Process;
+
+void firstFit(Partition partitions[], int numPartitions, Process processes[], int numProcesses) {
+    int i, j;
+
+    for (i = 0; i < numProcesses; i++) {
+        for (j = 0; j < numPartitions; j++) {
+            if (partitions[j].allocated == 0 && partitions[j].size >= processes[i].size) {
+                partitions[j].allocated = 1;
+                printf("Process of size %d KB is allocated to partition %d.\n", processes[i].size, j);
+                break;
+            }
+        }
+
+        if (j == numPartitions) {
+            printf("Process of size %d KB cannot be allocated.\n", processes[i].size);
+        }
+    }
+}
+
+int main() {
+    Partition partitions[MAX_PARTITIONS] = {
+        {40, 0},
+        {10, 0},
+        {30, 0},
+        {60, 0}
+    };
+
+    Process processes[MAX_PROCESSES] = {
+        {100, 0},
+        {50, 0},
+        {30, 0},
+        {120, 0},
+        {35, 0}
+    };
+
+    firstFit(partitions, MAX_PARTITIONS, processes, MAX_PROCESSES);
+
+    return 0;
+}
